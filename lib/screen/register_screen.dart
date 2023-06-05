@@ -66,7 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
             ),
              Padding(
-                padding: EdgeInsets.only(top: 20, left: 30, right: 30),
+                padding: EdgeInsets.only(top: 17, left: 30, right: 30),
                 child: TextField(
                   style:  TextStyle(
                     fontSize: 18,
@@ -94,7 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
             Padding(
-                padding: EdgeInsets.only(top: 20, left: 30, right: 30),
+                padding: EdgeInsets.only(top: 15, left: 30, right: 30),
                 child: TextField(
                   style:  TextStyle(
                     fontSize: 18,
@@ -151,7 +151,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-               Padding(padding: EdgeInsets.only(top: 30),
+               Padding(padding: EdgeInsets.only(top: 40),
                child: SizedBox(
                 width: 133,
                 height: 31,
