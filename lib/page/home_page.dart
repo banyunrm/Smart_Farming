@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Color.fromARGB(255, 246, 246, 246),
       body: Container(
-        margin: EdgeInsets.only(top: 15),
+        margin: EdgeInsets.only(top: 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

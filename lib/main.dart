@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hidroponik/screen/login_screen.dart';
 import 'package:flutter_hidroponik/screen/splash_screen.dart';
-
+import 'package:geolocator/geolocator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home:SplashScreen(),
+      home: SplashScreen(),
     );
   }
 }

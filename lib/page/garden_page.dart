@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'home_page.dart';
 
@@ -12,6 +13,15 @@ class GardenPage extends StatefulWidget {
 }
 
 class _GardenPageState extends State<GardenPage> {
+  void getLocation() async {
+    await Geolocator.checkPermission();
+    await Geolocator.requestPermission();
+
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print(position);
+  }
+
   List<Map<String, dynamic>> farmList = [];
   String _name = '';
   String _jenis = '';
@@ -19,11 +29,9 @@ class _GardenPageState extends State<GardenPage> {
   final _jenisField = TextEditingController();
   var addData;
 
-  double longitude = 0.0;
-  double latitude = 0.0;
+  late String longitude;
+  late String latitude;
   int _farm = 0;
-  final _longitudeField = TextEditingController();
-  final _latitudeField = TextEditingController();
   final _farmField = TextEditingController();
 
   @override
@@ -254,6 +262,31 @@ class _GardenPageState extends State<GardenPage> {
                               ),
                             ),
                           ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 25, right: 250),
+                        child: SizedBox(
+                          width: 133,
+                          height: 31,
+                          child: ElevatedButton(
+                              child: Text(
+                                'Get Location',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(3.0),
+                                shape: StadiumBorder(),
+                                primary: Color.fromARGB(255, 16, 120, 118),
+                              ),
+                              onPressed: () {
+                                getLocation().then((value) {});
+                            }),
                         ),
                       ),
                       Padding(
