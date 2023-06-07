@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class DetailScreen extends StatefulWidget {
+class DetailPage extends StatefulWidget {
   final dynamic farmDetail;
-  const DetailScreen({super.key, this.farmDetail});
+  const DetailPage({super.key, this.farmDetail});
 
   @override
-  State<DetailScreen> createState() => _DetailScreenState();
+  State<DetailPage> createState() => _DetailPageState();
 }
 
-class _DetailScreenState extends State<DetailScreen> {
+class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold();

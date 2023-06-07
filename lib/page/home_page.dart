@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => DetailScreen(
+                                    builder: (context) => DetailPage(
                                           farmDetail: farmItem,
                                         )));
                           },
@@ -132,19 +132,31 @@ class _HomePageState extends State<HomePage> {
                                             Text(
                                               farmItem['name'],
                                               style: GoogleFonts.poppins(
-                                                  fontSize: 21,
+                                                  fontSize: 18,
                                                   fontWeight: FontWeight.w600),
                                             ),
                                             Text(
                                               farmItem['jenis'],
                                               style: GoogleFonts.poppins(
-                                                  fontSize: 17,
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.w400),
                                             ),
                                             Text(
                                               farmItem['farm'].toString(),
                                               style: GoogleFonts.poppins(
-                                                  fontSize: 17,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                            Text(
+                                              farmItem['latitude'],
+                                              style: GoogleFonts.poppins(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                            Text(
+                                              farmItem['longitude'],
+                                              style: GoogleFonts.poppins(
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.w400),
                                             ),
                                             const SizedBox(height: 10),

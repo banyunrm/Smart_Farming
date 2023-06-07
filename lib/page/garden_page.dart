@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -13,14 +14,38 @@ class GardenPage extends StatefulWidget {
 }
 
 class _GardenPageState extends State<GardenPage> {
-  void getLocation() async {
-    await Geolocator.checkPermission();
-    await Geolocator.requestPermission();
+  // void getLocation() async {
+  //   await Geolocator.checkPermission();
+  //   await Geolocator.requestPermission();
 
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    print(position);
+  //   Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
+  //   print(position);
+  // }
+  Future<Position> _getCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied');
+    }
+
+    return await Geolocator.getCurrentPosition();
   }
+
+  String locationMessage = 'Get the Current Location';
+  late String longitude;
+  late String latitude;
 
   List<Map<String, dynamic>> farmList = [];
   String _name = '';
@@ -29,8 +54,6 @@ class _GardenPageState extends State<GardenPage> {
   final _jenisField = TextEditingController();
   var addData;
 
-  late String longitude;
-  late String latitude;
   int _farm = 0;
   final _farmField = TextEditingController();
 
@@ -270,27 +293,46 @@ class _GardenPageState extends State<GardenPage> {
                           width: 133,
                           height: 31,
                           child: ElevatedButton(
-                              child: Text(
-                                'Get Location',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                  color: Color.fromARGB(255, 255, 255, 255),
-                                ),
+                            child: Text(
+                              'Get Location',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 255, 255, 255),
                               ),
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.all(3.0),
-                                shape: StadiumBorder(),
-                                primary: Color.fromARGB(255, 16, 120, 118),
-                              ),
-                              onPressed: () {
-                                getLocation().then((value) {});
-                            }),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.all(3.0),
+                              shape: StadiumBorder(),
+                              primary: Color.fromARGB(255, 16, 120, 118),
+                            ),
+                            onPressed: () {
+                              _getCurrentLocation().then((value) {
+                                latitude = '${value.latitude}';
+                                longitude = '${value.longitude}';
+                                setState(() {
+                                  locationMessage =
+                                      'Latitude: $latitude , Longitude: $longitude';
+                                });
+                              });
+                            },
+                          ),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 50),
+                        padding: EdgeInsets.only(top: 15, right: 140, left: 20),
+                        child: Text(
+                          locationMessage, 
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Color.fromARGB(255, 23, 107, 95),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 80),
                         child: SizedBox(
                           width: 133,
                           height: 31,
