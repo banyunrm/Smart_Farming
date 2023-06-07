@@ -13,10 +13,10 @@ class DevicePage extends StatefulWidget {
 
 class _DevicePageState extends State<DevicePage> {
   List<Map<String, dynamic>> deviceList = [];
-  String _name = '';
-  String _jenis = '';
-  final _nameField = TextEditingController();
-  final _jenisField = TextEditingController();
+  String _nama = '';
+  String _jenisDevice = '';
+  final _namaField = TextEditingController();
+  final _jenisDeviceField = TextEditingController();
   var addData;
 
   @override
@@ -31,31 +31,31 @@ class _DevicePageState extends State<DevicePage> {
         List<Map<String, dynamic>>.from(jsonDecode(newData ?? "[]"));
     deviceList = convertedData;
 
-    if (_nameField.text.isEmpty ||
-        _jenisField.text.isEmpty) {
+    if (_namaField.text.isEmpty ||
+        _jenisDeviceField.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             duration: Duration(seconds: 2),
-            content: Text('Nama, Jenis Tanaman dan lahan tidak boleh kosong!')),
+            content: Text('Nama dan Jenis Device tidak boleh kosong!')),
       );
       return;
     }
 
     addData = {
-      "name": _name,
-      "jenis": _jenis,
+      "nama": _nama,
+      "jenisDevice": _jenisDevice,
     };
 
     deviceList.add(addData);
     var stringData = jsonEncode(deviceList);
     await prefs.setString('devicedata', stringData);
 
-    _nameField.clear();
-    _jenisField.clear();
+    _namaField.clear();
+    _jenisDeviceField.clear();
     FocusScope.of(context).unfocus();
     setState(() {
-      _name = '';
-      _jenis = '';
+      _nama = '';
+      _jenisDevice = '';
     });
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return DetailPage();
@@ -139,10 +139,10 @@ class _DevicePageState extends State<DevicePage> {
                         child: TextField(
                           onChanged: (value) {
                             setState(() {
-                              _name = value;
+                              _nama = value;
                             });
                           },
-                          controller: _nameField,
+                          controller: _namaField,
                           enableSuggestions: false,
                           autocorrect: false,
                           style: GoogleFonts.poppins(
@@ -173,10 +173,10 @@ class _DevicePageState extends State<DevicePage> {
                         child: TextField(
                           onChanged: (value) {
                             setState(() {
-                              _jenis = value;
+                              _jenisDevice = value;
                             });
                           },
-                          controller: _jenisField,
+                          controller: _jenisDeviceField,
                           enableSuggestions: false,
                           autocorrect: false,
                           style: GoogleFonts.poppins(
@@ -190,6 +190,33 @@ class _DevicePageState extends State<DevicePage> {
                           ),
                         ),
                       ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 80),
+                        child: SizedBox(
+                          width: 133,
+                          height: 31,
+                          child: ElevatedButton(
+                            child: Text(
+                              'Submit',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 255, 255, 255),
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.all(3.0),
+                              shape: StadiumBorder(),
+                              primary: Color.fromARGB(255, 16, 120, 118),
+                            ),
+                            onPressed: () {
+                              _storeData();
+                            },
+                          ),
+                        ),
+                      ),
+                    
                     ],
                   ),
                 ),
