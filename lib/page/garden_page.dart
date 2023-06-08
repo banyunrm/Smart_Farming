@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter_hidroponik/models/farm.dart';
+import 'package:flutter_hidroponik/controllers/farm.dart';
 
 class GardenPage extends StatefulWidget {
   const GardenPage({super.key});
@@ -279,25 +279,25 @@ class _GardenPageState extends State<GardenPage> {
                               if (_nameField.text.isEmpty ||
                                   _farmField.text.isEmpty ||
                                   _jenisField.text.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      duration: Duration(seconds: 2),
-                                      content: Text(
-                                          'Nama, Jenis Tanaman dan lahan tidak boleh kosong!')),
-                                );
+                                errorDialog(
+                                    context, 'Semua field harus diisi!');
                               } else {
-                                final farm = await Farm.create(
+                                final res = await Farm.create(
                                     _nameField.text,
                                     _jenisField.text,
                                     _farmField.text,
                                     longitude,
                                     latitude);
-                                if (farm != null && context.mounted) {
-                                  Navigator.pop(context, "popped");
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              'Berhasil Menambahkan Lahan!')));
+                                if (res != null && context.mounted) {
+                                  if (res.containsKey('error')) {
+                                    errorDialog(context, res['error']);
+                                  } else {
+                                    Navigator.pop(context, "popped");
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                'Berhasil Menambahkan Lahan!')));
+                                  }
                                 }
                               }
                             },
@@ -323,4 +323,24 @@ class _GardenPageState extends State<GardenPage> {
       ),
     );
   }
+}
+
+Future<void> errorDialog(context, String message) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
 }

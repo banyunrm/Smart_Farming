@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hidroponik/models/user.dart';
+import 'package:flutter_hidroponik/controllers/user.dart';
 import 'package:flutter_hidroponik/screen/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

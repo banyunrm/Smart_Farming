@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_hidroponik/models/sensor.dart';
+import 'package:flutter_hidroponik/controllers/sensor.dart';
 
 import 'home_page.dart';
 
@@ -58,7 +58,7 @@ class _DevicePageState extends State<DevicePage> {
                 style: GoogleFonts.poppins(
                   fontSize: 28.0,
                   fontWeight: FontWeight.w600,
-                  color: Color.fromARGB(255, 255, 255, 255),
+                  color: const Color.fromARGB(255, 255, 255, 255),
                 ),
               ),
               const SizedBox(height: 100),
@@ -110,7 +110,7 @@ class _DevicePageState extends State<DevicePage> {
                           autofocus: false,
                           decoration: InputDecoration(
                               labelText: 'Nama',
-                              contentPadding: EdgeInsets.all(1.0),
+                              contentPadding: const EdgeInsets.all(1.0),
                               labelStyle: GoogleFonts.poppins(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w600,
@@ -125,7 +125,8 @@ class _DevicePageState extends State<DevicePage> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                        padding:
+                            const EdgeInsets.only(top: 20, left: 15, right: 15),
                         child: TextField(
                           onChanged: (value) {
                             setState(() {});
@@ -202,23 +203,24 @@ class _DevicePageState extends State<DevicePage> {
                             onPressed: () async {
                               if (_namaField.text.isEmpty &&
                                   _guidField.text.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            'Nama dan GUID tidak boleh kosong')));
+                                errorDialog(context, 'Semua field harus diisi');
                               } else {
                                 final res = await Sensor.create(_namaField.text,
                                     type, _guidField.text, widget.farm['_id']);
                                 if (res != null && context.mounted) {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const HomePage()));
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              'Berhasil Menambahkan Sensor')));
+                                  if (res.containsKey('error')) {
+                                    errorDialog(context, res['error']);
+                                  } else {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const HomePage()));
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                'Berhasil Menambahkan Sensor')));
+                                  }
                                 }
                               }
                             },
@@ -242,4 +244,24 @@ class _DevicePageState extends State<DevicePage> {
           )),
     );
   }
+}
+
+Future<void> errorDialog(context, String message) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
 }

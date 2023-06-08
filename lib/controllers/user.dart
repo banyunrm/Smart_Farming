@@ -3,22 +3,6 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User {
-  late String id;
-  late String username;
-  late String email;
-
-  User({
-    required this.id,
-    required this.username,
-    required this.email,
-  });
-
-  User.fromJson(Map<String, dynamic> json) {
-    id = json['_id'];
-    username = json['username'];
-    email = json['email'];
-  }
-
   static login(String email, String password) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final response = await http.post(
@@ -29,18 +13,9 @@ class User {
       },
       body: jsonEncode(<String, String>{'email': email, 'password': password}),
     );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      try {
-        prefs.setString('token', data['token']);
-        return User.fromJson(data['user']);
-      } catch (e) {
-        throw Exception('Terjadi kesalahan');
-      }
-    } else {
-      throw Exception(response.body);
-    }
+    final data = jsonDecode(response.body);
+    prefs.setString('token', data['token']);
+    return data;
   }
 
   static register(String username, String email, String password) async {
@@ -56,17 +31,9 @@ class User {
         'password': password
       }),
     );
+    final data = jsonDecode(response.body);
 
-    if (response.statusCode == 200||response.statusCode == 201) {
-      final data = jsonDecode(response.body);
-      try {
-        return User.fromJson(data['newUser']);
-      } catch (e) {
-        throw Exception('Terjadi kesalahan');
-      }
-    } else {
-      throw Exception(response.body);
-    }
+    return data;
   }
 
   static logout() async {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hidroponik/page/home_page.dart';
 import 'package:flutter_hidroponik/screen/register_screen.dart';
-import 'package:flutter_hidroponik/models/user.dart';
+import 'package:flutter_hidroponik/controllers/user.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -151,31 +151,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             shape: const StadiumBorder(),
                           ),
                           onPressed: () async {
+                            FocusScope.of(context).unfocus();
                             if (_emailController.text.isEmpty ||
                                 _emailController.text.isEmpty) {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text('Login Gagal'),
-                                      content: const Text(
-                                          'Email atau password tidak boleh kosong'),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text('OK'))
-                                      ],
-                                    );
-                                  });
+                              errorDialog(context, 'Email dan Password Kosong');
                             } else {
-                              final user = await User.login(
+                              final res = await User.login(
                                   _emailController.value.text,
                                   _passwordController.value.text);
 
-                              if (user != null) {
-                                if (context.mounted) {
+                              if (res != null && context.mounted) {
+                                if (res.containsKey('error')) {
+                                  errorDialog(context, res['error']);
+                                } else {
                                   Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
@@ -186,22 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 }
                               } else {
                                 if (context.mounted) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: const Text('Login Failed'),
-                                          content: const Text(
-                                              'Email atau password salah'),
-                                          actions: [
-                                            TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('OK'))
-                                          ],
-                                        );
-                                      });
+                                  errorDialog(context, 'Login Gagal');
                                 }
                               }
                             }
@@ -336,4 +309,24 @@ class _LoginScreenState extends State<LoginScreen> {
       color: const Color.fromARGB(255, 28, 140, 97),
     );
   }
+}
+
+Future<void> errorDialog(context, String message) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
 }

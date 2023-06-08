@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hidroponik/screen/login_screen.dart';
-import 'package:flutter_hidroponik/models/user.dart';
+import 'package:flutter_hidroponik/controllers/user.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -174,40 +174,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 const Color.fromARGB(255, 16, 120, 118),
                           ),
                           onPressed: () async {
+                            FocusScope.of(context).unfocus();
                             if (_usernameController.text.isEmpty ||
                                 _emailController.text.isEmpty ||
                                 _passwordController.text.isEmpty) {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text('Registrasi Gagal'),
-                                      content: const Text(
-                                          'Semua field tidak boleh kosong'),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text('OK'))
-                                      ],
-                                    );
-                                  });
+                              errorDialog(context, 'Harap isi semua field');
                             } else {
-                              final user = await User.register(
+                              final res = await User.register(
                                   _usernameController.text,
                                   _emailController.text,
                                   _passwordController.text);
 
-                              if (user != null && context.mounted) {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LoginScreen()));
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('Registrasi Berhasil')));
+                              if (res != null && context.mounted) {
+                                if (res.containsKey('error')) {
+                                  errorDialog(context, res['error']);
+                                } else {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LoginScreen()));
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content:
+                                              Text('Registrasi Berhasil')));
+                                }
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -296,4 +287,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
       color: const Color.fromARGB(255, 28, 140, 97),
     );
   }
+}
+
+Future<void> errorDialog(context, String message) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
 }
