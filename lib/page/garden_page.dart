@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'home_page.dart';
@@ -14,14 +13,6 @@ class GardenPage extends StatefulWidget {
 }
 
 class _GardenPageState extends State<GardenPage> {
-  // void getLocation() async {
-  //   await Geolocator.checkPermission();
-  //   await Geolocator.requestPermission();
-
-  //   Position position = await Geolocator.getCurrentPosition(
-  //       desiredAccuracy: LocationAccuracy.high);
-  //   print(position);
-  // }
   Future<Position> _getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -52,8 +43,7 @@ class _GardenPageState extends State<GardenPage> {
   String _jenis = '';
   final _nameField = TextEditingController();
   final _jenisField = TextEditingController();
-  var addData;
-
+  Map<String, dynamic> addData = {};
   int _farm = 0;
   final _farmField = TextEditingController();
 
@@ -79,7 +69,6 @@ class _GardenPageState extends State<GardenPage> {
       );
       return;
     }
-
     addData = {
       "name": _name,
       "jenis": _jenis,
@@ -115,7 +104,7 @@ class _GardenPageState extends State<GardenPage> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
               image: AssetImage('assets/img/bg.png'), fit: BoxFit.cover),
         ),
@@ -124,7 +113,7 @@ class _GardenPageState extends State<GardenPage> {
           children: [
             Container(
               margin: EdgeInsets.only(top: 50),
-              child: Text(
+              child: const Text(
                 "Let's decide your",
                 style: TextStyle(
                   fontSize: 28.0,
@@ -134,21 +123,19 @@ class _GardenPageState extends State<GardenPage> {
                 ),
               ),
             ),
-            Container(
-              child: Text(
-                "Garden!",
-                style: TextStyle(
-                  fontSize: 28.0,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  color: Color.fromARGB(255, 255, 255, 255),
-                ),
+            const Text(
+              "Garden!",
+              style: TextStyle(
+                fontSize: 28.0,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                color: Color.fromARGB(255, 255, 255, 255),
               ),
             ),
-            SizedBox(height: 100),
+            const SizedBox(height: 100),
             Expanded(
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
@@ -167,8 +154,8 @@ class _GardenPageState extends State<GardenPage> {
                   child: Column(
                     children: [
                       Container(
-                        margin: EdgeInsets.only(top: 20),
-                        child: Text(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: const Text(
                           'Tambah Lahan',
                           style: TextStyle(
                             fontSize: 28.0,
@@ -179,7 +166,8 @@ class _GardenPageState extends State<GardenPage> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                        padding:
+                            const EdgeInsets.only(top: 20, left: 15, right: 15),
                         child: TextField(
                           onChanged: (value) {
                             setState(() {
@@ -189,14 +177,14 @@ class _GardenPageState extends State<GardenPage> {
                           controller: _nameField,
                           enableSuggestions: false,
                           autocorrect: false,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16.0,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
                             color: Color.fromARGB(255, 23, 107, 95),
                           ),
                           autofocus: false,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Nama Kebun',
                             contentPadding: EdgeInsets.all(1.0),
                             labelStyle: TextStyle(
@@ -215,7 +203,8 @@ class _GardenPageState extends State<GardenPage> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                        padding:
+                            const EdgeInsets.only(top: 20, left: 15, right: 15),
                         child: TextField(
                           onChanged: (value) {
                             setState(() {
@@ -225,14 +214,14 @@ class _GardenPageState extends State<GardenPage> {
                           controller: _jenisField,
                           enableSuggestions: false,
                           autocorrect: false,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16.0,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
                             color: Color.fromARGB(255, 23, 107, 95),
                           ),
                           autofocus: false,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Jenis Tanaman',
                             contentPadding: EdgeInsets.all(1.0),
                             labelStyle: TextStyle(
@@ -251,7 +240,8 @@ class _GardenPageState extends State<GardenPage> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                        padding:
+                            const EdgeInsets.only(top: 20, left: 15, right: 15),
                         child: TextField(
                           onChanged: (value) {
                             setState(() {
@@ -262,14 +252,14 @@ class _GardenPageState extends State<GardenPage> {
                           controller: _farmField,
                           enableSuggestions: false,
                           autocorrect: false,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16.0,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
                             color: Color.fromARGB(255, 23, 107, 95),
                           ),
                           autofocus: false,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Luas Lahan',
                             contentPadding: EdgeInsets.all(1.0),
                             labelStyle: TextStyle(
@@ -288,24 +278,16 @@ class _GardenPageState extends State<GardenPage> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 25, right: 250),
+                        padding: const EdgeInsets.only(top: 25, right: 250),
                         child: SizedBox(
                           width: 133,
                           height: 31,
                           child: ElevatedButton(
-                            child: Text(
-                              'Get Location',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                color: Color.fromARGB(255, 255, 255, 255),
-                              ),
-                            ),
                             style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3.0),
-                              shape: StadiumBorder(),
-                              primary: Color.fromARGB(255, 16, 120, 118),
+                              padding: const EdgeInsets.all(3.0),
+                              shape: const StadiumBorder(),
+                              backgroundColor:
+                                  const Color.fromARGB(255, 16, 120, 118),
                             ),
                             onPressed: () {
                               _getCurrentLocation().then((value) {
@@ -317,27 +299,46 @@ class _GardenPageState extends State<GardenPage> {
                                 });
                               });
                             },
+                            child: const Text(
+                              'Get Location',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 255, 255, 255),
+                              ),
+                            ),
                           ),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 15, right: 140, left: 20),
+                        padding: const EdgeInsets.only(
+                            top: 15, right: 140, left: 20),
                         child: Text(
-                          locationMessage, 
+                          locationMessage,
                           style: GoogleFonts.poppins(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
-                            color: Color.fromARGB(255, 23, 107, 95),
+                            color: const Color.fromARGB(255, 23, 107, 95),
                           ),
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 80),
+                        padding: const EdgeInsets.only(top: 80),
                         child: SizedBox(
                           width: 133,
                           height: 31,
                           child: ElevatedButton(
-                            child: Text(
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.all(3.0),
+                              shape: const StadiumBorder(),
+                              backgroundColor:
+                                  const Color.fromARGB(255, 16, 120, 118),
+                            ),
+                            onPressed: () {
+                              _storeData();
+                            },
+                            child: const Text(
                               'Submit',
                               style: TextStyle(
                                 fontSize: 16,
@@ -346,14 +347,6 @@ class _GardenPageState extends State<GardenPage> {
                                 color: Color.fromARGB(255, 255, 255, 255),
                               ),
                             ),
-                            style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(3.0),
-                              shape: StadiumBorder(),
-                              primary: Color.fromARGB(255, 16, 120, 118),
-                            ),
-                            onPressed: () {
-                              _storeData();
-                            },
                           ),
                         ),
                       ),

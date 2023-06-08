@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hidroponik/page/device_page.dart';
 import 'package:flutter_hidroponik/page/home_page.dart';

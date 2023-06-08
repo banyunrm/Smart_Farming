@@ -4,6 +4,8 @@ import 'package:flutter_hidroponik/screen/menu_screen.dart';
 import 'package:flutter_hidroponik/screen/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -17,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Color(0xFFF1F4F8),
       resizeToAvoidBottomInset: false,
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/img/garden.png"),
             fit: BoxFit.cover,
@@ -28,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Please Login First!',
                 style: TextStyle(
                   fontSize: 28.0,
@@ -37,15 +39,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Color.fromARGB(255, 255, 255, 255),
                 ),
               ),
-              Padding(padding: EdgeInsets.only(bottom: 40)),
+              const Padding(padding: EdgeInsets.only(bottom: 40)),
               Container(
-                margin: EdgeInsets.only(top: 20),
+                margin: const EdgeInsets.only(top: 20),
                 width: 385,
                 height: 310,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Color.fromARGB(190, 44, 44, 44),
                       blurRadius: 6,
@@ -55,10 +57,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 child: Column(
                   children: [
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(top: 20),
                     ),
-                    Text(
+                    const Text(
                       'Login First!',
                       style: TextStyle(
                         fontSize: 24,
@@ -67,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: Color.fromARGB(255, 17, 99, 97),
                       ),
                     ),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(top: 20, left: 30, right: 30),
                       child: TextField(
                         style: TextStyle(
@@ -98,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: EdgeInsets.only(top: 15, left: 30, right: 30),
                       child: TextField(
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
@@ -109,14 +111,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         decoration: InputDecoration(
                           labelText: 'Password',
                           contentPadding: EdgeInsets.all(1.0),
-                          labelStyle: TextStyle(
+                          labelStyle: const TextStyle(
                             fontSize: 18,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
                             color: Color.fromARGB(255, 17, 99, 97),
                           ),
                           suffixIcon: togglePassword(),
-                          enabledBorder: UnderlineInputBorder(
+                          enabledBorder: const UnderlineInputBorder(
                             borderSide: BorderSide(
                               color: Colors.black,
                               width: 1,
@@ -126,12 +128,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 50),
+                      padding: const EdgeInsets.only(top: 50),
                       child: SizedBox(
                         width: 133,
                         height: 31,
                         child: ElevatedButton(
-                          child: Text(
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.all(3.0),
+                            backgroundColor:
+                                const Color.fromARGB(255, 16, 120, 118),
+                            shape: const StadiumBorder(),
+                          ),
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomePage()),
+                            );
+                          },
+                          child: const Text(
                             'Login',
                             style: TextStyle(
                               fontSize: 16,
@@ -140,32 +155,53 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: Color.fromARGB(255, 255, 255, 255),
                             ),
                           ),
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.all(3.0),
-                            shape: StadiumBorder(),
-                            primary: Color.fromARGB(255, 16, 120, 118),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()),
-                            );
-                          },
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              Positioned(
-                child: Container(
-                  margin: EdgeInsets.only(right: 220, top: 10),
-                  child: Column(
+              Container(
+                margin: EdgeInsets.only(right: 220, top: 10),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      child: const Text(
+                        'Lupa Password?',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromRGBO(144, 255, 230, 1),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                const HomePage()));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 70),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      const Text(
+                        'Register ',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
                       GestureDetector(
-                        child: Text(
-                          'Lupa Password?',
+                        child: const Text(
+                          'Disini!',
                           style: TextStyle(
                             fontSize: 16,
                             fontFamily: 'Poppins',
@@ -177,7 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      HomePage()));
+                                      RegisterScreen()));
                         },
                       ),
                     ],
@@ -185,78 +221,38 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 70),
-                child: Positioned(
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Register ',
+                padding: const EdgeInsets.only(top: 15),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Aktivasi akun mu ',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                      GestureDetector(
+                        child: const Text(
+                          'Disini!',
                           style: TextStyle(
                             fontSize: 16,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
-                            color: Color.fromARGB(255, 255, 255, 255),
+                            color: Color.fromRGBO(144, 255, 230, 1),
                           ),
                         ),
-                        GestureDetector(
-                          child: Text(
-                            'Disini!',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
-                              color: Color.fromRGBO(144, 255, 230, 1),
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        RegisterScreen()));
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 15),
-                child: Positioned(
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Aktivasi akun mu ',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromARGB(255, 255, 255, 255),
-                          ),
-                        ),
-                        GestureDetector(
-                          child: Text(
-                            'Disini!',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
-                              color: Color.fromRGBO(144, 255, 230, 1),
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        HomePage()));
-                          },
-                        ),
-                      ],
-                    ),
+                        onTap: () {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      const HomePage()));
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -275,9 +271,9 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       },
       icon: _isSecurePassword
-          ? Icon(Icons.visibility)
-          : Icon(Icons.visibility_off),
-      color: Color.fromARGB(255, 28, 140, 97),
+          ? const Icon(Icons.visibility)
+          : const Icon(Icons.visibility_off),
+      color: const Color.fromARGB(255, 28, 140, 97),
     );
   }
 }
