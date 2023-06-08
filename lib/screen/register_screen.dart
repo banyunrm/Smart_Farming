@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hidroponik/screen/login_screen.dart';
-
-import '../page/home_page.dart';
+import 'package:flutter_hidroponik/models/user.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -12,9 +11,14 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool _isSecurePassword = true;
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -65,17 +69,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         color: Color.fromARGB(255, 17, 99, 97),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 17, left: 30, right: 30),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 17, left: 30, right: 30),
                       child: TextField(
-                        style: TextStyle(
+                        controller: _usernameController,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
                           color: Color.fromARGB(255, 17, 99, 97),
                         ),
                         autofocus: false,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Username',
                           contentPadding: EdgeInsets.all(1.0),
                           labelStyle: TextStyle(
@@ -93,17 +99,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 15, left: 30, right: 30),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 15, left: 30, right: 30),
                       child: TextField(
-                        style: TextStyle(
+                        controller: _emailController,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
                           color: Color.fromARGB(255, 17, 99, 97),
                         ),
                         autofocus: false,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Email',
                           contentPadding: EdgeInsets.all(1.0),
                           labelStyle: TextStyle(
@@ -125,6 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       padding:
                           const EdgeInsets.only(top: 15, left: 30, right: 30),
                       child: TextField(
+                        controller: _passwordController,
                         style: const TextStyle(
                           fontSize: 18,
                           fontFamily: 'Poppins',
@@ -135,7 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         autofocus: false,
                         decoration: InputDecoration(
                           labelText: 'Password',
-                          contentPadding: EdgeInsets.all(1.0),
+                          contentPadding: const EdgeInsets.all(1.0),
                           labelStyle: const TextStyle(
                             fontSize: 18,
                             fontFamily: 'Poppins',
@@ -164,12 +173,57 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             backgroundColor:
                                 const Color.fromARGB(255, 16, 120, 118),
                           ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomePage()),
-                            );
+                          onPressed: () async {
+                            if (_usernameController.text.isEmpty ||
+                                _emailController.text.isEmpty ||
+                                _passwordController.text.isEmpty) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text('Registrasi Gagal'),
+                                      content: const Text(
+                                          'Semua field tidak boleh kosong'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text('OK'))
+                                      ],
+                                    );
+                                  });
+                            } else {
+                              final user = await User.register(
+                                  _usernameController.text,
+                                  _emailController.text,
+                                  _passwordController.text);
+
+                              if (user != null && context.mounted) {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginScreen()));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('Registrasi Berhasil')));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Registrasi Gagal!',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w400,
+                                        color: Color.fromARGB(255, 17, 99, 97),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
                           },
                           child: const Text(
                             'Register',
@@ -215,7 +269,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoginScreen()));
+                                      const LoginScreen()));
                         },
                       ),
                     ],

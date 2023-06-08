@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hidroponik/page/detail_page.dart';
 import 'package:flutter_hidroponik/page/garden_page.dart';
 import 'package:flutter_hidroponik/page/profile_page.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_hidroponik/models/user.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,17 +13,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Map<String, dynamic>> farmList = [];
+  List<dynamic> farmList = [];
+  List<dynamic> sensorList = [];
+  Map<dynamic, dynamic> user = {};
+  bool isLoaded = false;
 
   void _getData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var rawData = prefs.getString('farmdata');
-
-    List<Map<String, dynamic>> convertedData =
-        List<Map<String, dynamic>>.from(jsonDecode(rawData ?? "[]"));
+    final data = await User.dashboard();
 
     setState(() {
-      farmList = convertedData;
+      farmList = data['farm'];
+      sensorList = data['sensor'];
+      user = data['user'];
+      isLoaded = true;
     });
   }
 
@@ -48,9 +48,9 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Hello, User!',
-                  style: TextStyle(
+                Text(
+                  'Hello, ${isLoaded ? user['username'][0].toUpperCase() + user['username'].substring(1) : '...'}',
+                  style: const TextStyle(
                     fontSize: 18,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
@@ -65,8 +65,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            const ProfilePage()));
+                        builder: (BuildContext context) => ProfilePage(
+                              user: user,
+                            )));
                   },
                 ),
               ],
@@ -85,14 +86,22 @@ class _HomePageState extends State<HomePage> {
                   itemCount: farmList.length,
                   itemBuilder: (context, index) {
                     var farmItem = farmList[index];
+                    var sensorItems = sensorList
+                        .where(
+                            (sensor) => sensor['_farm_id'] == farmItem['_id'])
+                        .toList();
                     return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        final popped = await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => DetailPage(
                                       farmDetail: farmItem,
+                                      sensorItems: sensorItems,
                                     )));
+                        if (popped == 'popped') {
+                          _getData();
+                        }
                       },
                       child: Card(
                         shape: RoundedRectangleBorder(
@@ -125,25 +134,31 @@ class _HomePageState extends State<HomePage> {
                                               fontWeight: FontWeight.w600),
                                         ),
                                         Text(
-                                          farmItem['jenis'],
+                                          farmItem['type'],
                                           style: GoogleFonts.poppins(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w400),
                                         ),
                                         Text(
-                                          farmItem['farm'].toString(),
+                                          farmItem['farmArea']
+                                                  ['\$numberDecimal']
+                                              .toString(),
                                           style: GoogleFonts.poppins(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w400),
                                         ),
                                         Text(
-                                          farmItem['latitude'],
+                                          farmItem['latitude']
+                                                  ['\$numberDecimal']
+                                              .toString(),
                                           style: GoogleFonts.poppins(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w400),
                                         ),
                                         Text(
-                                          farmItem['longitude'],
+                                          farmItem['longitude']
+                                                  ['\$numberDecimal']
+                                              .toString(),
                                           style: GoogleFonts.poppins(
                                               fontSize: 14,
                                               fontWeight: FontWeight.w400),
@@ -180,11 +195,9 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
-                //     ),
-                //   ),
               ),
             ),
-          if (farmList.isEmpty)
+          if (farmList.isEmpty && isLoaded)
             const Expanded(
               child: Center(
                   child: Text(
@@ -192,16 +205,28 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 20),
               )),
             ),
+          if (farmList.isEmpty && !isLoaded)
+            const Expanded(
+              child: Center(
+                  child: Text(
+                'Loading...',
+                style: TextStyle(fontSize: 20),
+              )),
+            ),
         ]),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return GardenPage();
+        onPressed: () async {
+          String received = await Navigator.push(context,
+              MaterialPageRoute(builder: (context) {
+            return const GardenPage();
           }));
+          if (received == 'popped') {
+            _getData();
+          }
         },
-        splashColor: Color.fromARGB(255, 36, 96, 93),
-        backgroundColor: Color.fromARGB(255, 80, 143, 128),
+        splashColor: const Color.fromARGB(255, 36, 96, 93),
+        backgroundColor: const Color.fromARGB(255, 80, 143, 128),
         child: const Icon(
           Icons.add,
           color: Color.fromARGB(255, 255, 255, 255),

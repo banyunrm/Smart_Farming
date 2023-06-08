@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hidroponik/screen/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_hidroponik/page/home_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,6 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
+    super.initState();
     startAnimation();
   }
 
@@ -39,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
               duration: const Duration(milliseconds: 1600),
               top: animate ? 0 : -30,
               left: animate ? 0 : -30,
-              child: Image(
+              child: const Image(
                 image: AssetImage('assets/img/shape.png'),
                 width: 80,
                 height: 80,
@@ -55,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Smart Farming',
                       style: TextStyle(
                           fontSize: 24,
@@ -81,13 +84,13 @@ class _SplashScreenState extends State<SplashScreen> {
               child: AnimatedOpacity(
                 opacity: animate ? 1 : 0,
                 duration: const Duration(milliseconds: 2000),
-                child: Align(  
+                child: const Align(
                   alignment: Alignment.bottomCenter,
                   child: Image(
-                  image: AssetImage('assets/img/people.png'),
-                  width: 400,
-                  height: 400,
-                ),
+                    image: AssetImage('assets/img/people.png'),
+                    width: 400,
+                    height: 400,
+                  ),
                 ),
               ),
             ),
@@ -103,7 +106,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   height: 60.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
-                    color: Color(0xFF78B2A4),
+                    color: const Color(0xFF78B2A4),
                   ),
                 ),
               ),
@@ -175,10 +178,23 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future startAnimation() async {
-    await Future.delayed(Duration(milliseconds: 500));
+    final prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    await Future.delayed(const Duration(milliseconds: 500));
     setState(() => animate = true);
-    await Future.delayed(Duration(milliseconds: 5000));
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    if (token == null) {
+      await Future.delayed(const Duration(milliseconds: 5000));
+      if (context.mounted) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()));
+      }
+    } else {
+      await Future.delayed(const Duration(milliseconds: 5000));
+      if (context.mounted) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const HomePage()));
+      }
+    }
   }
 }

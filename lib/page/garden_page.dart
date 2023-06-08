@@ -1,15 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
-
-import 'home_page.dart';
+import 'package:flutter_hidroponik/models/farm.dart';
 
 class GardenPage extends StatefulWidget {
+  const GardenPage({super.key});
+
   @override
-  _GardenPageState createState() => _GardenPageState();
+  State<GardenPage> createState() => _GardenPageState();
 }
 
 class _GardenPageState extends State<GardenPage> {
@@ -38,64 +36,13 @@ class _GardenPageState extends State<GardenPage> {
   late String longitude;
   late String latitude;
 
-  List<Map<String, dynamic>> farmList = [];
-  String _name = '';
-  String _jenis = '';
   final _nameField = TextEditingController();
   final _jenisField = TextEditingController();
-  Map<String, dynamic> addData = {};
-  int _farm = 0;
   final _farmField = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-  }
-
-  void _storeData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var newData = prefs.getString('farmdata');
-    List<Map<String, dynamic>> convertedData =
-        List<Map<String, dynamic>>.from(jsonDecode(newData ?? "[]"));
-    farmList = convertedData;
-
-    if (_nameField.text.isEmpty ||
-        _jenisField.text.isEmpty ||
-        _farmField.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            duration: Duration(seconds: 2),
-            content: Text('Nama, Jenis Tanaman dan lahan tidak boleh kosong!')),
-      );
-      return;
-    }
-    addData = {
-      "name": _name,
-      "jenis": _jenis,
-      "longitude": longitude,
-      "latitude": latitude,
-      "farm": _farm
-    };
-
-    farmList.add(addData);
-    var stringData = jsonEncode(farmList);
-    await prefs.setString('farmdata', stringData);
-
-    _nameField.clear();
-    _jenisField.clear();
-    FocusScope.of(context).unfocus();
-    setState(() {
-      _name = '';
-      _jenis = '';
-      _farm = 0;
-    });
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return HomePage();
-    }));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-          content: Text('Lahan Ditambahkan!'), duration: Duration(seconds: 1)),
-    );
   }
 
   @override
@@ -112,7 +59,7 @@ class _GardenPageState extends State<GardenPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              margin: EdgeInsets.only(top: 50),
+              margin: const EdgeInsets.only(top: 50),
               child: const Text(
                 "Let's decide your",
                 style: TextStyle(
@@ -170,9 +117,7 @@ class _GardenPageState extends State<GardenPage> {
                             const EdgeInsets.only(top: 20, left: 15, right: 15),
                         child: TextField(
                           onChanged: (value) {
-                            setState(() {
-                              _name = value;
-                            });
+                            setState(() {});
                           },
                           controller: _nameField,
                           enableSuggestions: false,
@@ -207,9 +152,7 @@ class _GardenPageState extends State<GardenPage> {
                             const EdgeInsets.only(top: 20, left: 15, right: 15),
                         child: TextField(
                           onChanged: (value) {
-                            setState(() {
-                              _jenis = value;
-                            });
+                            setState(() {});
                           },
                           controller: _jenisField,
                           enableSuggestions: false,
@@ -244,10 +187,7 @@ class _GardenPageState extends State<GardenPage> {
                             const EdgeInsets.only(top: 20, left: 15, right: 15),
                         child: TextField(
                           onChanged: (value) {
-                            setState(() {
-                              int luas = int.parse(value);
-                              _farm = luas;
-                            });
+                            setState(() {});
                           },
                           controller: _farmField,
                           enableSuggestions: false,
@@ -335,8 +275,31 @@ class _GardenPageState extends State<GardenPage> {
                               backgroundColor:
                                   const Color.fromARGB(255, 16, 120, 118),
                             ),
-                            onPressed: () {
-                              _storeData();
+                            onPressed: () async {
+                              if (_nameField.text.isEmpty ||
+                                  _farmField.text.isEmpty ||
+                                  _jenisField.text.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      duration: Duration(seconds: 2),
+                                      content: Text(
+                                          'Nama, Jenis Tanaman dan lahan tidak boleh kosong!')),
+                                );
+                              } else {
+                                final farm = await Farm.create(
+                                    _nameField.text,
+                                    _jenisField.text,
+                                    _farmField.text,
+                                    longitude,
+                                    latitude);
+                                if (farm != null && context.mounted) {
+                                  Navigator.pop(context, "popped");
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Berhasil Menambahkan Lahan!')));
+                                }
+                              }
                             },
                             child: const Text(
                               'Submit',

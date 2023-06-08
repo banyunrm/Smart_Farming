@@ -1,75 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hidroponik/models/user.dart';
+import 'package:flutter_hidroponik/screen/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final dynamic user;
+  const ProfilePage({super.key, this.user});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  dynamic user;
+
+  @override
+  void initState() {
+    super.initState();
+    user = widget.user;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF1F4F8),
-      body: Column(children: [
-        Container(
-          alignment: Alignment.topCenter,
-          margin: EdgeInsets.only(
-              top: 28.0), // Sesuaikan dengan posisi top yang diinginkan
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Profile',
-                style: TextStyle(
-                  fontSize: 28.0,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF637E5B),
-                ),
-              ),
-             
-            ],
+      appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Color(0xFF637E5B),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: const Text(
+          'Profile',
+          style: TextStyle(
+            fontSize: 28.0,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w800,
+            color: Color(0xFF637E5B),
           ),
         ),
-        Container(
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
+      ),
+      backgroundColor: const Color(0xFFF1F4F8),
+      body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Container(
+              width: 100,
+              height: 100,
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: AssetImage(
+                    'assets/img/pp.png',
+                  ))),
+            ),
+            Positioned(
+                right: 4,
+                bottom: 4,
+                child: Container(
+                  width: 30,
+                  height: 30,
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: AssetImage(
-                      'assets/img/pp.png',
-                    ))),
-              ),
-              Positioned(
-                  right: 4,
-                  bottom: 4,
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: const Icon(
-                      Icons.camera_alt,
-                      size: 20,
-                      color: Color(0xff476072),
-                    ),
-                  ))
-            ],
-          ),
+                    color: Colors.white,
+                  ),
+                  child: const Icon(
+                    Icons.camera_alt,
+                    size: 20,
+                    color: Color(0xff476072),
+                  ),
+                ))
+          ],
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Container(
-          width: 350,
-          height: 350,
+          margin: const EdgeInsets.only(left: 30, right: 30),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height / 4,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
@@ -77,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Colors.grey.withOpacity(0.3),
                 spreadRadius: 2,
                 blurRadius: 5,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               )
             ],
           ),
@@ -86,126 +94,51 @@ class _ProfilePageState extends State<ProfilePage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               height: double.infinity,
               child: Column(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 10, left: 8),
+                      padding: const EdgeInsets.only(top: 10, left: 8),
                       child: Column(
                         children: [
-                          Positioned(
-                              top: 16,
-                              left: 16,
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Username',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 16,
-                                        color: Color(0xFF476072),
-                                      ),
-                                    ),
-                                    Text(
-                                      'Smarthome',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF476072),
-                                      ),
-                                    ),
-                                    Text(
-                                      'Host',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 16,
-                                        color: Color(0xFF476072),
-                                      ),
-                                    ),
-                                    Text(
-                                      'rmq2.pptik.id',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF476072),
-                                      ),
-                                    ),
-                                    Text(
-                                      'Virtual Host',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 16,
-                                        color: Color(0xFF476072),
-                                      ),
-                                    ),
-                                    Text(
-                                      '/smarthome',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF476072),
-                                      ),
-                                    ),
-                                    Text(
-                                      'Topic Publish',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 16,
-                                        color: Color(0xFF476072),
-                                      ),
-                                    ),
-                                    Text(
-                                      'smartAgriculturePhone1',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF476072),
-                                      ),
-                                    ),
-                                    Text(
-                                      'Topic Publish',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 16,
-                                        color: Color(0xFF476072),
-                                      ),
-                                    ),
-                                    Text(
-                                      'SmartAgriculture',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF476072),
-                                      ),
-                                    ),
-                                    Text(
-                                      'Guid Device',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 14,
-                                        color: Color(0xFF476072),
-                                      ),
-                                    ),
-                                    Text(
-                                      '000000000000000000',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF476072),
-                                      ),
-                                    ),
-                                  ])),
+                          const Text(
+                            'Username',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              color: Color(0xFF476072),
+                            ),
+                          ),
+                          Text(
+                            user['username'][0].toUpperCase() +
+                                user['username'].substring(1),
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF476072),
+                            ),
+                          ),
+                          const Text(
+                            'Email',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              color: Color(0xFF476072),
+                            ),
+                          ),
+                          Text(
+                            user['email'],
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF476072),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -216,7 +149,8 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         Container(
-          width: 350,
+          margin: const EdgeInsets.only(left: 30, right: 30),
+          width: MediaQuery.of(context).size.width,
           height: 40,
           decoration:
               BoxDecoration(borderRadius: BorderRadius.circular(8), boxShadow: [
@@ -224,29 +158,37 @@ class _ProfilePageState extends State<ProfilePage> {
               color: Colors.grey.withOpacity(0.3),
               spreadRadius: 2,
               blurRadius: 6,
-              offset: Offset(0, 3),
+              offset: const Offset(0, 3),
             ),
           ]),
-          child: Card(
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8)
-            ),
-            child: GestureDetector(
-              onTap: () {
-                // Aksi ketika card ditekan
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => HalamanBaru(),
-                //   ),
-                // );
-              },
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
+          child: ElevatedButton(
+            onPressed: () async {
+              final res = await User.logout();
+              final prefs = await SharedPreferences.getInstance();
+              if (res != null && context.mounted) {
+                prefs.clear();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()));
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Logout Berhasil')));
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF637E5B),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
-
+            ),
+            child: const Text(
+              'Logout',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
         )

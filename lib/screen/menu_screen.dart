@@ -12,7 +12,7 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  var listWidget = [ 
+  var listWidget = [
     const HomePage(),
     const HistoryPage(),
     const ProfilePage(),
@@ -22,20 +22,18 @@ class _MenuScreenState extends State<MenuScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF1F4F8),
+      backgroundColor: const Color(0xFFF1F4F8),
       body: listWidget[navIndex],
-    
-      bottomNavigationBar: CurvedNavigationBar( 
+      bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Colors.white,
-        color: Color(0xFF82AC7E),
-        animationDuration: Duration(milliseconds: 300),
-        onTap: (index){ 
-           setState(() {
+        color: const Color(0xFF82AC7E),
+        animationDuration: const Duration(milliseconds: 300),
+        onTap: (index) {
+          setState(() {
             navIndex = index;
           });
         },
-        
-        items: [
+        items: const [
           Icon(
             Icons.home,
             color: Colors.white,

@@ -1,41 +1,32 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_hidroponik/page/device_page.dart';
-import 'package:flutter_hidroponik/page/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailPage extends StatefulWidget {
   final dynamic farmDetail;
-  const DetailPage({super.key, this.farmDetail});
+  final dynamic sensorItems;
+  const DetailPage({super.key, this.farmDetail, this.sensorItems});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
 }
 
 class _DetailPageState extends State<DetailPage> {
-  var _farmDetail;
-  
+  var _farmDetail = {};
+  var _sensorItems = [];
+
   @override
   void initState() {
     super.initState();
-    _farmDetail = widget.farmDetail;
     _getData();
   }
 
-  List<Map<String, dynamic>> deviceList = [];
-  var addData;
+  var addData = {};
 
   void _getData() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var rawData = prefs.getString('devicedata');
-
-    List<Map<String, dynamic>> convertedData =
-        List<Map<String, dynamic>>.from(jsonDecode(rawData ?? "[]"));
-
     setState(() {
-      deviceList = convertedData;
-      print(convertedData);
+      _farmDetail = widget.farmDetail;
+      _sensorItems = widget.sensorItems;
     });
   }
 
@@ -44,139 +35,214 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        margin: EdgeInsets.only(top: 55),
+        margin: const EdgeInsets.only(top: 55),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              margin: EdgeInsets.only(right: 30, left: 30),
+              margin: const EdgeInsets.only(right: 30, left: 30),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_back,
                       size: 40,
                       color: Color.fromRGBO(43, 90, 82, 1),
                     ),
                     onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (BuildContext context) => HomePage()));
+                      Navigator.pop(context, 'popped');
                     },
                   ),
                   Text('Detail',
                       style: GoogleFonts.poppins(
                         fontSize: 25,
                         fontWeight: FontWeight.w600,
-                        color: Color.fromARGB(255, 36, 96, 93),
+                        color: const Color.fromARGB(255, 36, 96, 93),
                       )),
-                  GestureDetector(
-                    child: Icon(
-                      Icons.person,
-                      size: 40,
-                      color: Color.fromRGBO(28, 101, 140, 1),
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (BuildContext context) => HomePage()));
-                    },
-                  ),
+                  const SizedBox(
+                    width: 40,
+                  )
                 ],
               ),
             ),
-             Container(
-                  margin: EdgeInsets.only(left: 15, right: 20, top: 20),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: Color.fromARGB(255, 52, 113, 88), width: 1)),
-                  )
-              ),
-            SizedBox(height: 50),
+            Container(
+                margin: const EdgeInsets.only(left: 15, right: 20, top: 20),
+                decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                          color: Color.fromARGB(255, 52, 113, 88), width: 1)),
+                )),
+            const SizedBox(height: 50),
             Card(
-              margin: EdgeInsets.only(left: 25, right: 25),
-              color: Color.fromARGB(255, 50, 93, 71),
+              margin: const EdgeInsets.only(left: 25, right: 25),
+              color: const Color.fromARGB(255, 50, 93, 71),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                    _farmDetail['name'],
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                    )),
-                    Text(
-                    _farmDetail['jenis'],
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                    )),
-                    Text(
-                    _farmDetail['farm'].toString(),
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                    )),
-                    Text(
-                    _farmDetail['latitude'],
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                    )),
-                    Text(
-                    _farmDetail['longitude'],
-                      style: GoogleFonts.poppins(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                    )),
+                    Row(
+                      children: [
+                        Text('Nama Lahan: ',
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            )),
+                        Text(_farmDetail['name'],
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            )),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Tipe Lahan: ',
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            )),
+                        Text(_farmDetail['type'],
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            )),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Latitude Lahan: ',
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            )),
+                        Text(
+                            _farmDetail['latitude']['\$numberDecimal']
+                                .toString(),
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            )),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Longitude Lahan: ',
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            )),
+                        Text(
+                            _farmDetail['longitude']['\$numberDecimal']
+                                .toString(),
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            )),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Luas Area Lahan: ',
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            )),
+                        Text(
+                            _farmDetail['farmArea']['\$numberDecimal']
+                                .toString(),
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            )),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ),
-             Card(
-              margin: EdgeInsets.only(left: 25, right: 25),
-              color: Color.fromARGB(255, 50, 93, 71),
+            const SizedBox(height: 10),
+            Card(
+              margin: const EdgeInsets.only(left: 25, right: 25),
+              color: const Color.fromARGB(255, 50, 93, 71),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                 
-                  ],
-                ),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          'Sensor Tersedia :'
+                          ' ',
+                          style: GoogleFonts.poppins(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          )),
+                      if (_sensorItems.isNotEmpty)
+                        ListView.builder(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemCount: _sensorItems.length,
+                          itemBuilder: (context, index) {
+                            var sensor = _sensorItems[index];
+                            return Text(
+                              sensor['name'],
+                              style: GoogleFonts.poppins(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white,
+                              ),
+                            );
+                          },
+                        ),
+                      if (_sensorItems.isEmpty)
+                        Text(
+                          'Tidak ada sensor',
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        ),
+                    ]),
               ),
             ),
-            
-          
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return DevicePage();
+            return DevicePage(
+              farm: widget.farmDetail,
+            );
           }));
         },
-        child: Icon(
+        splashColor: const Color.fromARGB(255, 36, 96, 93),
+        backgroundColor: const Color.fromARGB(255, 80, 143, 128),
+        child: const Icon(
           Icons.add,
           color: Color.fromARGB(255, 255, 255, 255),
         ),
-        splashColor: Color.fromARGB(255, 36, 96, 93),
-        backgroundColor: Color.fromARGB(255, 80, 143, 128),
       ),
     );
   }

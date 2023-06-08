@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hidroponik/page/home_page.dart';
-import 'package:flutter_hidroponik/screen/menu_screen.dart';
 import 'package:flutter_hidroponik/screen/register_screen.dart';
+import 'package:flutter_hidroponik/models/user.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,11 +12,18 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _isSecurePassword = true;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF1F4F8),
+      backgroundColor: const Color(0xFFF1F4F8),
       resizeToAvoidBottomInset: false,
       body: Container(
         decoration: const BoxDecoration(
@@ -69,17 +76,19 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: Color.fromARGB(255, 17, 99, 97),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 20, left: 30, right: 30),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 20, left: 30, right: 30),
                       child: TextField(
-                        style: TextStyle(
+                        controller: _emailController,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
                           color: Color.fromARGB(255, 17, 99, 97),
                         ),
                         autofocus: false,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Email',
                           contentPadding: EdgeInsets.all(1.0),
                           labelStyle: TextStyle(
@@ -98,8 +107,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 15, left: 30, right: 30),
+                      padding:
+                          const EdgeInsets.only(top: 15, left: 30, right: 30),
                       child: TextField(
+                        controller: _passwordController,
                         style: const TextStyle(
                           fontSize: 18,
                           fontFamily: 'Poppins',
@@ -110,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         autofocus: false,
                         decoration: InputDecoration(
                           labelText: 'Password',
-                          contentPadding: EdgeInsets.all(1.0),
+                          contentPadding: const EdgeInsets.all(1.0),
                           labelStyle: const TextStyle(
                             fontSize: 18,
                             fontFamily: 'Poppins',
@@ -139,12 +150,61 @@ class _LoginScreenState extends State<LoginScreen> {
                                 const Color.fromARGB(255, 16, 120, 118),
                             shape: const StadiumBorder(),
                           ),
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HomePage()),
-                            );
+                          onPressed: () async {
+                            if (_emailController.text.isEmpty ||
+                                _emailController.text.isEmpty) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text('Login Gagal'),
+                                      content: const Text(
+                                          'Email atau password tidak boleh kosong'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text('OK'))
+                                      ],
+                                    );
+                                  });
+                            } else {
+                              final user = await User.login(
+                                  _emailController.value.text,
+                                  _passwordController.value.text);
+
+                              if (user != null) {
+                                if (context.mounted) {
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              const HomePage()));
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text('Login Berhasil')));
+                                }
+                              } else {
+                                if (context.mounted) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text('Login Failed'),
+                                          content: const Text(
+                                              'Email atau password salah'),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text('OK'))
+                                          ],
+                                        );
+                                      });
+                                }
+                              }
+                            }
                           },
                           child: const Text(
                             'Login',
@@ -162,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(right: 220, top: 10),
+                margin: const EdgeInsets.only(right: 220, top: 10),
                 child: Column(
                   children: [
                     GestureDetector(
@@ -213,7 +273,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      RegisterScreen()));
+                                      const RegisterScreen()));
                         },
                       ),
                     ],
