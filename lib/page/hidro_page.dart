@@ -51,231 +51,222 @@ class _HidroPageState extends State<HidroPage>
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Color(0xFFF1F4F8),
-      body: Container(
-        child: SingleChildScrollView(
-          child: Column(
-             children: [
-          Container(
-            alignment: Alignment.topCenter,
-            margin: EdgeInsets.only(
-                top: 28.0), // Sesuaikan dengan posisi top yang diinginkan
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Hydroponic',
-                  style: TextStyle(
-                    fontSize: 28.0,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xFF637E5B),
+      backgroundColor: const Color(0xFFF1F4F8),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.topCenter,
+              margin: const EdgeInsets.only(
+                  top: 28.0), // Sesuaikan dengan posisi top yang diinginkan
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Hydroponic',
+                    style: TextStyle(
+                      fontSize: 28.0,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF637E5B),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(top: 40),
+              width: MediaQuery.of(context).size.width,
+              height: 380,
+              child: ClipPath(
+                clipper: HomePageClipper(),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color.fromARGB(255, 245, 245, 245),
+                        Color.fromARGB(255, 153, 191, 225),
+                      ],
+                    ),
+                  ),
+                  child: AnimatedBuilder(
+                    animation: _waveHeightAnimation,
+                    builder: (context, child) {
+                      return WaveWidget(
+                        config: CustomConfig(
+                          gradients: [
+                            [Colors.blue, Colors.blue.shade200],
+                            [Colors.blue.shade200, Colors.blue.shade400],
+                          ],
+                          durations: [
+                            5000,
+                            4000,
+                          ],
+                          heightPercentages: _waveHeightAnimation.value,
+                          blur: const MaskFilter.blur(BlurStyle.solid, 5),
+                          gradientBegin: Alignment.bottomLeft,
+                          gradientEnd: Alignment.topRight,
+                        ),
+                        waveAmplitude: 4,
+                        size: const Size(double.infinity, double.infinity),
+                      );
+                    },
                   ),
                 ),
-                // Image(
-                //   image: AssetImage('assets/img/plant.png'),
-                //   width: 24.0,
-                //   height: 24.0,
-                // ),
-              ],
+              ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 40),
-            width: MediaQuery.of(context).size.width,
-            height: 380,
-            child: ClipPath(
-              clipper: HomePageClipper(),
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color.fromARGB(255, 245, 245, 245),
-                      Color.fromARGB(255, 153, 191, 225),
+            const SizedBox(height: 20),
+            Container(
+              width: 350,
+              height: 250,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
+                  )
+                ],
+              ),
+              child: Card(
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, left: 40),
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.settings,
+                                      color: Colors.grey[850],
+                                      size: 50,
+                                    ),
+                                    const Text(
+                                      'POMPA',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF476072),
+                                      ),
+                                    ),
+                                    const Text(
+                                      'Off',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16,
+                                        color: Color(0xFF476072),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, right: 40),
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.water_outlined,
+                                      color: Colors.blue[800],
+                                      size: 50,
+                                    ),
+                                    const Text(
+                                      'POMPA',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF476072),
+                                      ),
+                                    ),
+                                    const Text(
+                                      'Off',
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16,
+                                        color: Color(0xFF476072),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const Center(
+                        child: Column(
+                          children: [
+                            Text(
+                              'Value Sensor',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF476072),
+                              ),
+                            ),
+                            Text(
+                              '-',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
+                                color: Color(0xFF476072),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            bottom: 16), // Atur jarak bottom sebesar 16 piksel
+                        child: ElevatedButton(
+                          onPressed: toggleWaveHeight,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF637E5B),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: Text(
+                            testing ? 'Reset' : 'Test',
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
-                child: AnimatedBuilder(
-                  animation: _waveHeightAnimation,
-                  builder: (context, child) {
-                    return WaveWidget(
-                      config: CustomConfig(
-                        gradients: [
-                          [Colors.blue, Colors.blue.shade200],
-                          [Colors.blue.shade200, Colors.blue.shade400],
-                        ],
-                        durations: [
-                          5000,
-                          4000,
-                        ],
-                        heightPercentages: _waveHeightAnimation.value,
-                        blur: const MaskFilter.blur(BlurStyle.solid, 5),
-                        gradientBegin: Alignment.bottomLeft,
-                        gradientEnd: Alignment.topRight,
-                      ),
-                      waveAmplitude: 4,
-                      size: const Size(double.infinity, double.infinity),
-                    );
-                  },
-                ),
               ),
             ),
-          ),
-          SizedBox(height: 20),
-          Container(
-            width: 350,
-            height: 250,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 3),
-                )
-              ],
-            ),
-            child: Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column( 
-                          children: [
-                            Padding(padding: EdgeInsets.only(top: 10, left: 40),
-                              child: Column(
-                                children: [
-                            Icon(
-                              Icons.settings,
-                              color: Colors.grey[850],
-                              size: 50,
-                            ),
-                            Text(
-                                  'POMPA',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF476072),
-                                  ),
-                                ),
-                            Text(
-                                  'Off',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16,
-                                  
-                                    color: Color(0xFF476072),
-                                  ),
-                                ),
-
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column( 
-                          children: [
-                            Padding(padding: EdgeInsets.only(top: 10, right: 40),
-                              child: Column(
-                                children: [
-                            Icon(
-                              Icons.water_outlined,
-                              color: Colors.blue[800],
-                              size: 50,
-                            ),
-                            Text(
-                                  'POMPA',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF476072),
-                                  ),
-                                ),
-                            Text(
-                                  'Off',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16,
-                                  
-                                    color: Color(0xFF476072),
-                                  ),
-                                ),
-
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-
-                      ],
-                    ),
-                    Center(
-                      child: Column(
-                        children: [
-                           Text(
-                                  'Value Sensor',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF476072),
-                                  ),
-                                ),
-                           Text(
-                                  '-',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16,
-                                  
-                                    color: Color(0xFF476072),
-                                  ),
-                                ),
-
-                        ],
-                      ),
-                    ),
-                    
-                    Padding(
-  padding: EdgeInsets.only(bottom: 16), // Atur jarak bottom sebesar 16 piksel
-  child: ElevatedButton(
-    onPressed: toggleWaveHeight,
-    child: Text(
-      testing ? 'Reset' : 'Test',
-      style: TextStyle(
-        fontFamily: 'Poppins',
-        fontSize: 16,
-        color: Colors.white,
-      ),
-    ),
-    style: ElevatedButton.styleFrom(
-      primary: Color(0xFF637E5B),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-    ),
-  ),
-) 
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-          ),)
+          ],
+        ),
       ),
     );
   }

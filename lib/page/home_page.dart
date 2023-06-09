@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hidroponik/page/detail_page.dart';
 import 'package:flutter_hidroponik/page/garden_page.dart';
 import 'package:flutter_hidroponik/page/profile_page.dart';
-import 'package:flutter_hidroponik/screen/login_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_hidroponik/controllers/user.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,90 +13,264 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<dynamic> farmList = [];
+  List<dynamic> sensorList = [];
+  Map<dynamic, dynamic> user = {};
+  bool isLoaded = false;
+
+  void _getData() async {
+    final data = await User.dashboard();
+
+    setState(() {
+      farmList = data['farm'];
+      sensorList = data['sensor'];
+      user = data['user'];
+      isLoaded = true;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color.fromARGB(255, 235, 255, 241),
+      backgroundColor: const Color.fromARGB(255, 246, 246, 246),
       body: Container(
-        margin: EdgeInsets.only(top: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              margin: EdgeInsets.only(right: 30, left: 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Hello, User!',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                      color: Color.fromARGB(255, 17, 99, 97),
-                    ),
+        margin: const EdgeInsets.only(top: 40),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Container(
+            margin: const EdgeInsets.only(right: 30, left: 30),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Hello, ${isLoaded ? user['username'][0].toUpperCase() + user['username'].substring(1) : '...'}',
+                  style: GoogleFonts.poppins(
+                      color: const Color.fromARGB(255, 17, 99, 97),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600),
+                ),
+                GestureDetector(
+                  child: const Icon(
+                    Icons.person,
+                    size: 40,
+                    color: Color.fromRGBO(28, 101, 140, 1),
                   ),
-                  GestureDetector(
-                    child: Icon(
-                      Icons.person,
-                      size: 40,
-                      color: Color.fromRGBO(28, 101, 140, 1),
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (BuildContext context) => ProfilePage()));
-                    },
-                  ),
-                ],
-              ),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => ProfilePage(
+                              user: user,
+                            )));
+                  },
+                ),
+              ],
             ),
-            Image.asset(
-              'assets/img/people2.png',
-              height: 300,
-              width: 370,
-            ),
+          ),
+          Image.asset(
+            'assets/img/people2.png',
+            height: 300,
+            width: 370,
+          ),
+          if (farmList.isNotEmpty)
             Expanded(
               child: Container(
-                padding: EdgeInsets.only(top: 30),
-                height: MediaQuery.of(context).size.height / 2,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
                   boxShadow: [
                     BoxShadow(
-                      color: Color.fromARGB(190, 18, 12, 12),
-                      blurRadius: 3,
-                      offset: Offset(0, -5),
-                      spreadRadius: -2.0,
+                      color: Color.fromRGBO(0, 0, 0, 0.2),
+                      blurRadius: 20.0,
+                      spreadRadius: 1.0,
+                      offset: Offset(
+                        0.0,
+                        0.0,
+                      ),
+                    )
+                  ],
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                padding:
+                    const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+                child: Column(
+                  children: [
+                    Text(
+                      'Lahan Anda',
+                      style: GoogleFonts.poppins(
+                          color: const Color.fromARGB(255, 17, 99, 97),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: farmList.length,
+                        itemBuilder: (context, index) {
+                          var farmItem = farmList[index];
+                          var sensorItems = sensorList
+                              .where((sensor) =>
+                                  sensor['_farm_id'] == farmItem['_id'])
+                              .toList();
+                          return GestureDetector(
+                            onTap: () async {
+                              final popped = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DetailPage(
+                                            farmDetail: farmItem,
+                                            sensorItems: sensorItems,
+                                          )));
+                              if (popped == 'popped') {
+                                _getData();
+                              }
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              color: const Color.fromARGB(255, 178, 228, 216),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: IntrinsicHeight(
+                                  child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        Expanded(
+                                            flex: 2,
+                                            child: Image.asset(
+                                                'assets/img/plant.png',
+                                                fit: BoxFit.cover)),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          flex: 5,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Text(
+                                                farmItem['name'],
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              Text(
+                                                farmItem['type'],
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                              Text(
+                                                farmItem['farmArea']
+                                                        ['\$numberDecimal']
+                                                    .toString(),
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                              Text(
+                                                farmItem['latitude']
+                                                        ['\$numberDecimal']
+                                                    .toString(),
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                              Text(
+                                                farmItem['longitude']
+                                                        ['\$numberDecimal']
+                                                    .toString(),
+                                                style: GoogleFonts.poppins(
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                              const SizedBox(height: 10),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    'Tap Untuk',
+                                                    style: GoogleFonts.poppins(
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  Text(
+                                                    ' Detail',
+                                                    style: GoogleFonts.poppins(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 23, 107, 95),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ]),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      
-                    ],
-                  ),
-                ),
               ),
             ),
-          ],
-        ),
+          if (farmList.isEmpty && isLoaded)
+            const Expanded(
+              child: Center(
+                  child: Text(
+                'No Data',
+                style: TextStyle(fontSize: 20),
+              )),
+            ),
+          if (farmList.isEmpty && !isLoaded)
+            const Expanded(
+              child: Center(
+                  child: Text(
+                'Loading...',
+                style: TextStyle(fontSize: 20),
+              )),
+            ),
+        ]),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return GardenPage();
+        onPressed: () async {
+          String received = await Navigator.push(context,
+              MaterialPageRoute(builder: (context) {
+            return const GardenPage();
           }));
+          if (received == 'popped') {
+            _getData();
+          }
         },
-        child: Icon(
+        splashColor: const Color.fromARGB(255, 36, 96, 93),
+        backgroundColor: const Color.fromARGB(255, 80, 143, 128),
+        child: const Icon(
           Icons.add,
           color: Color.fromARGB(255, 255, 255, 255),
         ),
-        splashColor: Color.fromARGB(255, 36, 96, 93),
-        backgroundColor: Color.fromARGB(255, 80, 143, 128),
       ),
     );
   }
