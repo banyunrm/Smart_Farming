@@ -13,17 +13,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Timer(Duration(seconds: 10), (() {
-  //     Navigator.pushReplacement(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => LoginScreen()),
-  //     );
-  //   })
-  //   );
-  // }
+
   bool animate = false;
 
   @override
@@ -112,66 +102,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             )
           ],
-          //   alignment: Alignment.center,
-          // children: [
-          //   AnimatedPositioned(
-          //     duration: Duration(milliseconds: 1600),
-          //     top: 100,
-          //     left: animate ? 30.0 : -80,
-          //     child: AnimatedOpacity(
-          //       duration: Duration(milliseconds: 1600),
-          //       opacity: animate ? 1 : 0,
-          //       child: Column(
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: [
-          //           Text(
-          //             'Hydroponic',
-          //             style: TextStyle(
-          //               fontSize: 24,
-          //               fontWeight: FontWeight.bold,
-          //               color: Colors.black,
-          //               fontFamily: 'Poppins',
-          //             ),
-          //           ),
-          //           Text(
-          //             'Monitoring your plant',
-          //             style: TextStyle(
-          //               fontSize: 16,
-          //               fontFamily: 'Poppins',
-          //               fontWeight: FontWeight.w300,
-          //               color: Colors.black54,
-          //             ),
-          //           )
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          //   AnimatedPositioned(
-          //     duration: Duration(microseconds: 2400),
-          //     bottom: 100,
-          //     child: AnimatedOpacity(
-          //       duration: Duration(milliseconds: 2000),
-          //       opacity: animate ? 1 : 0,
-          //      child: Image(
-          //       image: AssetImage('assets/img/people.png'),
-          //       width: 350,
-          //       height: 350,
-          //     ),
-          //     )
-          //   ),
-          //   // Positioned(
-          //   //   bottom: 50,
-          //   //   child: Text (
-          //   //     'Hydroponic',
-          //   //     style: TextStyle(
-          //   //       fontSize: 24,
-          //   //       fontWeight: FontWeight.bold,
-          //   //       color: Colors.black,
-          //   //       fontFamily: 'Poppins',
-          //   //     ),
-          //   //   ),
-          //   // ),
-          // ],
+  
         ),
       ),
     );
@@ -179,6 +110,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future startAnimation() async {
     final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
     final String? token = prefs.getString('token');
 
     await Future.delayed(const Duration(milliseconds: 500));

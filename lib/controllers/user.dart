@@ -6,8 +6,7 @@ class User {
   static login(String email, String password) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final response = await http.post(
-      Uri.parse(
-          'https://smartfarming-api-mulkihafizh.vercel.app/smart-farming/signin'),
+      Uri.parse('https://smartfarming-api-mulkihafizh.vercel.app/user/signin'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -15,13 +14,13 @@ class User {
     );
     final data = jsonDecode(response.body);
     prefs.setString('token', data['token']);
+    prefs.setString('id', data['user']['_id']);
     return data;
   }
 
   static register(String username, String email, String password) async {
     final response = await http.post(
-      Uri.parse(
-          'https://smartfarming-api-mulkihafizh.vercel.app/smart-farming/signup'),
+      Uri.parse('https://smartfarming-api-mulkihafizh.vercel.app/user/signup'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -38,8 +37,7 @@ class User {
 
   static logout() async {
     final response = await http.post(
-      Uri.parse(
-          'https://smartfarming-api-mulkihafizh.vercel.app/smart-farming/signout'),
+      Uri.parse('https://smartfarming-api-mulkihafizh.vercel.app/user/signout'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -63,7 +61,7 @@ class User {
 
     final response = await http.get(
       Uri.parse(
-          'https://smartfarming-api-mulkihafizh.vercel.app/smart-farming/dashboard'),
+          'https://smartfarming-api-mulkihafizh.vercel.app/user/dashboard/${token!}'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': prefs.getString('token') ?? '',
@@ -75,7 +73,7 @@ class User {
     try {
       return data;
     } catch (e) {
-      throw Exception('Terjadi kesalahan');
+      throw Exception(e);
     }
   }
 }

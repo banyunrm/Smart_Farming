@@ -194,29 +194,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(right: 220, top: 10),
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      child: const Text(
-                        'Lupa Password?',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          color: Color.fromRGBO(144, 255, 230, 1),
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const HomePage()));
-                      },
-                    ),
-                  ],
-                ),
-              ),
               Padding(
                 padding: const EdgeInsets.only(top: 70),
                 child: Center(
@@ -247,42 +224,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       const RegisterScreen()));
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 15),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Aktivasi akun mu ',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          color: Color.fromARGB(255, 255, 255, 255),
-                        ),
-                      ),
-                      GestureDetector(
-                        child: const Text(
-                          'Disini!',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                            color: Color.fromRGBO(144, 255, 230, 1),
-                          ),
-                        ),
-                        onTap: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      const HomePage()));
                         },
                       ),
                     ],

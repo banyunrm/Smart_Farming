@@ -90,13 +90,13 @@ class _DetailPageState extends State<DetailPage> {
                       children: [
                         Text('Nama Lahan: ',
                             style: GoogleFonts.poppins(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
                             )),
                         Text(_farmDetail['name'],
                             style: GoogleFonts.poppins(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: Colors.white,
                             )),
@@ -106,13 +106,13 @@ class _DetailPageState extends State<DetailPage> {
                       children: [
                         Text('Tipe Lahan: ',
                             style: GoogleFonts.poppins(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: Colors.white,
                             )),
                         Text(_farmDetail['type'],
                             style: GoogleFonts.poppins(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: Colors.white,
                             )),
@@ -122,7 +122,7 @@ class _DetailPageState extends State<DetailPage> {
                       children: [
                         Text('Latitude Lahan: ',
                             style: GoogleFonts.poppins(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: Colors.white,
                             )),
@@ -130,7 +130,7 @@ class _DetailPageState extends State<DetailPage> {
                             _farmDetail['latitude']['\$numberDecimal']
                                 .toString(),
                             style: GoogleFonts.poppins(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: Colors.white,
                             )),
@@ -140,7 +140,7 @@ class _DetailPageState extends State<DetailPage> {
                       children: [
                         Text('Longitude Lahan: ',
                             style: GoogleFonts.poppins(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: Colors.white,
                             )),
@@ -148,7 +148,7 @@ class _DetailPageState extends State<DetailPage> {
                             _farmDetail['longitude']['\$numberDecimal']
                                 .toString(),
                             style: GoogleFonts.poppins(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: Colors.white,
                             )),
@@ -158,7 +158,7 @@ class _DetailPageState extends State<DetailPage> {
                       children: [
                         Text('Luas Area Lahan: ',
                             style: GoogleFonts.poppins(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: Colors.white,
                             )),
@@ -166,7 +166,7 @@ class _DetailPageState extends State<DetailPage> {
                             _farmDetail['farmArea']['\$numberDecimal']
                                 .toString(),
                             style: GoogleFonts.poppins(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w400,
                               color: Colors.white,
                             )),
@@ -207,7 +207,7 @@ class _DetailPageState extends State<DetailPage> {
                             return Text(
                               sensor['name'],
                               style: GoogleFonts.poppins(
-                                fontSize: 16,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 color: Colors.white,
                               ),
@@ -218,7 +218,7 @@ class _DetailPageState extends State<DetailPage> {
                         Text(
                           'Tidak ada sensor',
                           style: GoogleFonts.poppins(
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.w400,
                             color: Colors.white,
                           ),
