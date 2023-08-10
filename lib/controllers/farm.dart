@@ -18,6 +18,7 @@ class Farm {
         'farmArea': farmArea,
         'longitude': longitude,
         'latitude': latitude,
+        'userId': prefs.getString('id')!,
       }),
     );
 
@@ -25,3 +26,4 @@ class Farm {
     return data;
   }
 }
+

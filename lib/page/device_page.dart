@@ -13,20 +13,29 @@ class DevicePage extends StatefulWidget {
 }
 
 class _DevicePageState extends State<DevicePage> {
-  List<String> options = [
-    "Water Flow",
-    "Water Meter",
-    "Water pH",
-    "Soil Moisture"
-  ];
+  List<dynamic> options = [];
+  List<dynamic> actuator = [];
 
   String type = "Water Flow";
+  String actuatorVal = "64d1eaafb30f1ea738b38118";
   final _namaField = TextEditingController();
   final _guidField = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    getData();
+  }
+
+  void getData() {
+    Sensor.getType().then((value) => {
+          setState(() {
+            print(value['type'][0]['name']);
+
+            options = value['type'];
+            actuator = value['actuator'];
+          })
+        });
   }
 
   @override
@@ -160,33 +169,69 @@ class _DevicePageState extends State<DevicePage> {
                         margin:
                             const EdgeInsets.only(top: 20, left: 15, right: 15),
                         width: MediaQuery.of(context).size.width,
-                        child: DropdownButton<String>(
-                          value: type,
-                          underline: Container(
-                            height: 1,
-                            color: Colors.black,
-                          ),
-                          hint: const Text("Select an option"),
-                          onChanged: (newValue) {
-                            setState(() {
-                              type = newValue!;
-                            });
-                          },
-                          items: options
-                              .map<DropdownMenuItem<String>>((String option) {
-                            return DropdownMenuItem<String>(
-                                value: option,
-                                child: Text(
-                                  option,
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w600,
-                                    color:
-                                        const Color.fromARGB(255, 23, 107, 95),
-                                  ),
-                                ));
-                          }).toList(),
-                        ),
+                        child: options.isNotEmpty
+                            ? DropdownButton<dynamic>(
+                                value: type,
+                                underline: Container(
+                                  height: 1,
+                                  color: Colors.black,
+                                ),
+                                hint: const Text("Select an option"),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    type = newValue!;
+                                  });
+                                },
+                                items: options.map<DropdownMenuItem<dynamic>>(
+                                    (dynamic option) {
+                                  return DropdownMenuItem<dynamic>(
+                                      value: option['name'],
+                                      child: Text(
+                                        option['name'],
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w600,
+                                          color: const Color.fromARGB(
+                                              255, 23, 107, 95),
+                                        ),
+                                      ));
+                                }).toList(),
+                              )
+                            : const SizedBox(),
+                      ),
+                      Container(
+                        margin:
+                            const EdgeInsets.only(top: 20, left: 15, right: 15),
+                        width: MediaQuery.of(context).size.width,
+                        child: actuator.isNotEmpty
+                            ? DropdownButton<dynamic>(
+                                value: actuatorVal,
+                                underline: Container(
+                                  height: 1,
+                                  color: Colors.black,
+                                ),
+                                hint: const Text("Select an option"),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    actuatorVal = newValue!;
+                                  });
+                                },
+                                items: actuator.map<DropdownMenuItem<dynamic>>(
+                                    (dynamic option) {
+                                  return DropdownMenuItem<dynamic>(
+                                      value: option['_id'],
+                                      child: Text(
+                                        option['name'],
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w600,
+                                          color: const Color.fromARGB(
+                                              255, 23, 107, 95),
+                                        ),
+                                      ));
+                                }).toList(),
+                              )
+                            : const SizedBox(),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 80),
@@ -205,8 +250,12 @@ class _DevicePageState extends State<DevicePage> {
                                   _guidField.text.isEmpty) {
                                 errorDialog(context, 'Semua field harus diisi');
                               } else {
-                                final res = await Sensor.create(_namaField.text,
-                                    type, _guidField.text, widget.farm['_id']);
+                                final res = await Sensor.create(
+                                    _namaField.text,
+                                    type,
+                                    _guidField.text,
+                                    widget.farm['_id'],
+                                    actuatorVal);
                                 if (res != null && context.mounted) {
                                   if (res.containsKey('error')) {
                                     errorDialog(context, res['error']);

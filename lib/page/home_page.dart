@@ -18,9 +18,11 @@ class _HomePageState extends State<HomePage> {
   Map<dynamic, dynamic> user = {};
   bool isLoaded = false;
 
-  void _getData() async {
+  Future _getData() async {
     final data = await User.dashboard();
-
+    if (data == null) {
+      return Navigator.of(context).pushReplacementNamed('/login');
+    }
     setState(() {
       farmList = data['farm'];
       sensorList = data['sensor'];
